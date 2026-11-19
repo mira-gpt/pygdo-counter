@@ -16,6 +16,9 @@ total = counter.get('page-visits')      # database plus unflushed increments
 counter.flush()                        # optional explicit synchronous flush
 ```
 
+`increment()` returns the new value of the current pending file, not the
+overall total. Use `get()` when the combined count is needed.
+
 Names contain 1–64 lowercase ASCII letters, digits, underscores or hyphens,
 starting with a letter or digit. Names are not private; do not put secrets or
 personal data in them. The module exposes no public increment endpoint.
