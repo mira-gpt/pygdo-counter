@@ -1,1 +1,2 @@
 module_counter = "Counters"
+counter_pagecount_display = "Pagecount: %d"

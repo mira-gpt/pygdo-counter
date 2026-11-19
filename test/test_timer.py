@@ -6,6 +6,17 @@ from gdo.counter.module_counter import module_counter
 
 
 class CounterTimerTest(unittest.IsolatedAsyncioTestCase):
+    def test_module_count_up_delegates_to_counter(self):
+        with patch('gdo.counter.Counter.Counter') as factory:
+            factory.return_value.increment.return_value = 8
+            self.assertEqual(8, module_counter().count_up('pagecount', 3))
+            factory.return_value.increment.assert_called_once_with('pagecount', 3)
+
+    def test_module_count_up_defaults_to_one(self):
+        with patch('gdo.counter.Counter.Counter') as factory:
+            module_counter().count_up('pagecount')
+            factory.return_value.increment.assert_called_once_with('pagecount', 1)
+
     def test_timer_interval(self):
         events = MagicMock()
         events.FOREVER = 123

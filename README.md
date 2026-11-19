@@ -7,6 +7,14 @@ in `GDO_Counter` by Dog every 300 seconds. This module does not use Redis.
 Install the module with the PyGDO module installer. In Python:
 
 ```python
+from gdo.counter.module_counter import module_counter
+
+module_counter.instance().count_up('pagecount', 1)
+```
+
+For reading the combined total or forcing a flush:
+
+```python
 from gdo.counter.Counter import Counter
 
 counter = Counter()
@@ -16,8 +24,16 @@ total = counter.get('page-visits')      # database plus unflushed increments
 counter.flush()                        # optional explicit synchronous flush
 ```
 
-`increment()` returns the new value of the current pending file, not the
-overall total. Use `get()` when the combined count is needed.
+`count_up()` and `increment()` return the new value of the current pending
+file, not the overall total. Use `get()` when the combined count is needed.
+
+The optional `counter_pagecount` module setting selects the title, top, left,
+right or bottom page position. When set, the module displays the combined
+`pagecount` and increments it once per framework-handled GET request (including
+non-HTML responses); other HTTP methods do not increment it. Unset disables
+both the display and automatic counting. Assets served directly by the web
+server bypass PyGDO and are not counted. Counting is per request, not per
+person, and may include bots and refreshes.
 
 Names contain 1–64 lowercase ASCII letters, digits, underscores or hyphens,
 starting with a letter or digit. Names are not private; do not put secrets or
